@@ -4,7 +4,7 @@ import sys
 def right_binary_search(arr, target):
     left = 0
     right = len(arr) - 1
-    if arr[right] < target:
+    if arr[right] < target or arr[left] > target:
         return -1
     if arr[right] == target:
         return right
