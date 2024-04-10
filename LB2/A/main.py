@@ -2,23 +2,23 @@ import sys
 
 
 def right_binary_search(arr, target):
-    left = 0
-    right = len(arr) - 1
+    left, right = 0, len(arr) - 1
+
     if arr[right] < target or arr[left] > target:
         return -1
-    if arr[right] == target:
-        return right
+
+    result = -1
     while left <= right:
         mid = (left + right) // 2
-        if arr[mid] == target:
-            while mid + 1 < len(arr) and arr[mid] == arr[mid + 1]:
-                mid += 1
-            return mid
+        if arr[mid] > target:
+            right = mid - 1
         elif arr[mid] < target:
             left = mid + 1
         else:
-            right = mid - 1
-    return -1
+            result = mid
+            left = mid + 1
+
+    return result
 
 
 def solution(arr, idx):
