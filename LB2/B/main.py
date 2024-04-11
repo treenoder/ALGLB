@@ -1,19 +1,35 @@
 def solution(p, q):
-    passengers_count = {}
-    for passengers in p:
-        if passengers not in passengers_count:
-            passengers_count[passengers] = 0
-        passengers_count[passengers] += 1
+    passengers_indices = {}
+    for idx, count in enumerate(p):
+        if count not in passengers_indices:
+            passengers_indices[count] = []
+        passengers_indices[count].append(idx + 1)  # Use 1-based indexing
+
+    def binary_search(indices, low, high):
+        left, right = 0, len(indices) - 1
+        while left <= right:
+            mid = (left + right) // 2
+            if low <= indices[mid] <= high:
+                return True
+            elif indices[mid] < low:
+                left = mid + 1
+            else:
+                right = mid - 1
+        return False
 
     results = []
     for l, r, x in q:
-        count = 0
-        for city_number in range(l - 1, r):
-            if p[city_number] == x:
-                count += 1
-        results.append('1' if count > 0 else '0')
+        if x not in passengers_indices:
+            results.append('0')
+        else:
+            indices = passengers_indices[x]
+            if binary_search(indices, l, r):
+                results.append('1')
+            else:
+                results.append('0')
 
     return ''.join(results)
+
 
 
 def main():
