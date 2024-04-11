@@ -1,5 +1,5 @@
 def calculate_weights(N, m1, mN, d):
-    l, r = -1000, 1000
+    l, r = -1e7, 1e7
     while r - l > 1e-7:
         m2 = (l + r) / 2
         weights = [m1, m2]
