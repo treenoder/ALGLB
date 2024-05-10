@@ -1,4 +1,7 @@
-def evaluate(ex: str) -> int:
+def evaluate(ex: str, memo: dict) -> int:
+    if ex in memo:
+        return memo[ex]
+
     operators = []
     parts = []
     start = 0
@@ -16,16 +19,18 @@ def evaluate(ex: str) -> int:
         else:
             result -= part
 
+    memo[ex] = result
     return result
 
 
 def solution(ex: str) -> int:
     max_val = float('-inf')
+    memo = {}
     for i in range(len(ex)):
         new_ex = ex[:i] + ex[i + 1:]
         if not new_ex:
             continue
-        evl = evaluate(new_ex)
+        evl = evaluate(new_ex, memo)
         max_val = max(max_val, evl)
     return int(max_val)
 
