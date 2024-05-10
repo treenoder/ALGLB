@@ -1,15 +1,22 @@
 def solution(ex: str) -> int:
-    ex_evals = []
-    for i in range(len(ex) - 2):
-        new_ex = ex[:i + 1] + ex[i + 2:]
-        evl = eval(new_ex.replace(' ', ''))
-        ex_evals.append(evl)
-    return max(ex_evals)
+    max_val = float('-inf')
+    for i in range(len(ex)):
+        if ex[i + 1:].startswith(ex[i]):
+            continue
+        new_ex = ex[:i] + ex[i + 1:]
+        if not new_ex:
+            continue
+        try:
+            evl = eval(new_ex)
+        except Exception:
+            continue
+        max_val = max(max_val, evl)
+    return int(max_val)
 
 
 def main():
     ex = input()
-    result = solution(ex)
+    result = solution(ex.replace(' ', ''))
     print(result)
 
 
