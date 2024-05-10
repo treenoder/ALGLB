@@ -1,23 +1,21 @@
-def solution(n, s, arr: list) -> int:
+def solution(s, arr: list) -> int:
     original_total = sum(arr)
     mn = min(arr)
     mx = max(arr)
-    arr.remove(mn)
-    arr.remove(mx)
-    total = sum(arr)
-    target = s - total
-    if target > 100:
-        return -1
-    if mn == mx == 100:
-        return 0
-
-    return target
+    for last in range(101):
+        total = original_total + last
+        new_min = min(mn, last)
+        new_max = max(mx, last)
+        final = total - new_min - new_max
+        if final >= s:
+            return last
+    return -1
 
 
 def main():
-    [n, s] = list(map(int, input().split()))
+    [_, s] = list(map(int, input().split()))
     arr = list(map(int, input().split()))
-    result = solution(n, s, arr)
+    result = solution(s, arr)
     print(result)
 
 

@@ -9,5 +9,5 @@ def test_solution():
         (10, 480, [59, 98, 88, 54, 70, 24, 8, 94, 46], 45)
     ]
 
-    for n, s, arr, expected in table:
-        assert solution(n, s, arr) == expected
+    for _, s, arr, expected in table:
+        assert solution(s, arr) == expected
