@@ -14,16 +14,21 @@ SI = {
 def solution(length: str) -> int:
     if length == "meter":
         return 0
-    convert_power = 0
-    for prefix, power in SI.items():
-        if length.startswith(prefix):
-            convert_power = power + solution(length[len(prefix):])
-            break
 
-    if "^" in length:
-        unit = int(length.split("^")[1])
-        return convert_power * unit
-    return convert_power
+    clean_length = length.replace("meter^", "")
+    dim = 1
+    if "2" in clean_length:
+        dim = 2
+    elif "3" in clean_length:
+        dim = 3
+    clean_length = clean_length.replace("2", "").replace("3", "")
+
+    total_exponent = 0
+    for prefix, power in SI.items():
+        if prefix in clean_length:
+            total_exponent += clean_length.count(prefix) * power
+
+    return total_exponent * dim
 
 
 def main():
