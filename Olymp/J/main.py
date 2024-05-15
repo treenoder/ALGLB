@@ -1,42 +1,35 @@
-def is_non_decreasing(sequence):
-    return all(sequence[i] <= sequence[i + 1] for i in range(len(sequence) - 1))
-
-
-def backtrack(numbers, index, current_sequence, min_removals, current_removals):
-    if index == len(numbers):
-        if is_non_decreasing(current_sequence):
-            min_removals[0] = min(min_removals[0], current_removals)
-        return
-
-    number_str = numbers[index]
-    for i in range(len(number_str) + 1):
-        new_sequence = current_sequence[:]
-        if i < len(number_str):
-            new_number = number_str[:i] + number_str[i + 1:]
-            if not new_number:
-                continue
-            new_number = int(new_number)
-        else:
-            new_number = int(number_str)
-        new_sequence.append(new_number)
-        backtrack(numbers, index + 1, new_sequence, min_removals,
-                  current_removals + (len(number_str) - len(str(new_number))))
-        new_sequence.pop()
+from collections import defaultdict
 
 
 def solution(n, arr):
-    if n == 1:
-        return 0
+    def generate_sub_numbers(num):
+        sub_numbers = set()
+        num_str = str(num)
+        length = len(num_str)
 
-    numbers = [str(num) for num in arr]
-    min_removals = [float('inf')]
-    backtrack(numbers, 0, [], min_removals, 0)
+        for mask in range(1, 1 << length):
+            sub_number = ''.join([num_str[i] for i in range(length) if mask & (1 << i)])
+            sub_numbers.add(int(sub_number))
 
-    return min_removals[0] if min_removals[0] != float('inf') else -1
+        return sub_numbers
 
+    sub_numbers_list = [generate_sub_numbers(a) for a in arr]
+    dp = [defaultdict(lambda: float('inf')) for _ in range(n)]
 
-# def solution(n, arr) -> int:
-#     ...
+    for sub_number in sub_numbers_list[0]:
+        dp[0][sub_number] = len(str(arr[0])) - len(str(sub_number))
+
+    for i in range(1, n):
+        for sub_number in sub_numbers_list[i]:
+            sub_number_length = len(str(sub_number))
+            deletions = len(str(arr[i])) - sub_number_length
+            for prev_sub_number in dp[i - 1]:
+                if prev_sub_number <= sub_number:
+                    dp[i][sub_number] = min(dp[i][sub_number], dp[i - 1][prev_sub_number] + deletions)
+
+    min_deletions = min(dp[-1].values(), default=float('inf'))
+
+    return min_deletions if min_deletions != float('inf') else -1
 
 
 def main():
