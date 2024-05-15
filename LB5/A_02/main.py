@@ -56,10 +56,26 @@ def solution(n, costs, roads):
 
 
 def main():
-    n = int(input())
-    costs = list(map(int, input().split()))
-    m = int(input())
-    roads = [list(map(int, input().split())) for _ in range(m)]
+    import sys
+    input = sys.stdin.read
+    data = input().split()
+
+    idx = 0
+
+    n = int(data[idx])
+    idx += 1
+    costs = list(map(int, data[idx:idx + n]))
+    idx += n
+
+    m = int(data[idx])
+    idx += 1
+    roads = []
+    for _ in range(m):
+        a = int(data[idx])
+        b = int(data[idx + 1])
+        roads.append((a, b))
+        idx += 2
+
     result = solution(n, costs, roads)
     print(result)
 
