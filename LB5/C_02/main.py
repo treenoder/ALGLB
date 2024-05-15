@@ -1,5 +1,34 @@
 def solution(n, arr) -> tuple[int, list[int]]:
-    ...
+    dist = [float('inf')] * n
+    pred = [-1] * n
+    dist[0] = 0
+
+    for _ in range(n - 1):
+        for u in range(n):
+            for v in range(n):
+                if arr[u][v] != 100000 and dist[u] + arr[u][v] < dist[v]:
+                    dist[v] = dist[u] + arr[u][v]
+                    pred[v] = u
+
+    for u in range(n):
+        for v in range(n):
+            if arr[u][v] != 100000 and dist[u] + arr[u][v] < dist[v]:
+                cycle = []
+                for _ in range(n):
+                    v = pred[v]
+
+                cycle_start = v
+                visited = set()
+                while cycle_start not in visited:
+                    visited.add(cycle_start)
+                    cycle.append(cycle_start + 1)
+                    cycle_start = pred[cycle_start]
+
+                cycle = cycle[cycle.index(cycle_start + 1):]
+
+                return len(cycle), cycle
+
+    return 0, []
 
 
 def main():
