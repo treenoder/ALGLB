@@ -34,7 +34,7 @@ def solution(n, arr):
 
 def main():
     n = int(input())
-    arr = list(map(int, input()))
+    arr = [int(input()) for _ in range(n)]
     result = solution(n, arr)
     print(result)
 
