@@ -1,51 +1,62 @@
 import heapq
 
 
-def solution(costs, roads):
+def solution(n, costs, roads):
     n = len(costs)
 
     graph = [[] for _ in range(n)]
     for a, b in roads:
-        graph[a - 1].append((b - 1, costs[a - 1]))
-        graph[b - 1].append((a - 1, costs[b - 1]))
+        graph[a - 1].append(b - 1)
+        graph[b - 1].append(a - 1)
 
-    dist = [float('inf')] * n
-    dist[0] = 0
-    jerrycan = costs[0]
+    pq = [(costs[0], 0, costs[0])]
+    dist = [[float('inf')] * (max(costs) + 1) for _ in range(n)]
+    dist[0][costs[0]] = costs[0]
 
-    pq = [(0, 0)]
     while pq:
-        d, u = heapq.heappop(pq)
+        current_cost, u, jerry_can_fuel = heapq.heappop(pq)
 
-        if dist[u] < d:
-            continue
+        if u == n - 1:
+            return current_cost
 
-        for v, c in graph[u]:
-            new_d = d + c
-            if new_d < dist[v]:
-                dist[v] = new_d
-                heapq.heappush(pq, (new_d, v))
+        for v in graph[u]:
+            new_cost = current_cost + costs[u]
+            if new_cost < dist[v][jerry_can_fuel]:
+                dist[v][jerry_can_fuel] = new_cost
+                heapq.heappush(pq, (new_cost, v, jerry_can_fuel))
 
-            new_d_with_refuel = d + min(c, jerrycan)
-            if new_d_with_refuel < dist[v]:
-                dist[v] = new_d_with_refuel
-                heapq.heappush(pq, (new_d_with_refuel, v))
+            if jerry_can_fuel > 0:
+                new_cost = current_cost
+                new_jerry_can_fuel = max(0, jerry_can_fuel - costs[v])
+                if new_cost < dist[v][new_jerry_can_fuel]:
+                    dist[v][new_jerry_can_fuel] = new_cost
+                    heapq.heappush(pq, (new_cost, v, new_jerry_can_fuel))
 
-                jerrycan -= min(c, jerrycan)
-                if u != 0:
-                    jerrycan = costs[u]
-
-    return dist[n - 1] if dist[n - 1] != float('inf') else -1
+    return -1
 
 
 def main():
-    input()
-    costs = list(map(int, input().split()))
-    m = int(input())
+    import sys
+    input = sys.stdin.read
+    data = input().split()
+
+    idx = 0
+
+    n = int(data[idx])
+    idx += 1
+    costs = list(map(int, data[idx:idx + n]))
+    idx += n
+
+    m = int(data[idx])
+    idx += 1
     roads = []
     for _ in range(m):
-        roads.append(list(map(int, input().split())))
-    result = solution(costs, roads)
+        a = int(data[idx])
+        b = int(data[idx + 1])
+        roads.append((a, b))
+        idx += 2
+
+    result = solution(n, costs, roads)
     print(result)
 
 
