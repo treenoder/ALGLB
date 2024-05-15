@@ -1,37 +1,41 @@
 def solution(n, arr):
-    dist = [float('inf')] * n
-    pred = [-1] * n
-    for src in range(n):
-        dist[src] = 0
-        for _ in range(n - 1):
+    def find_negative_cycle():
+        dist = [float('inf')] * n
+        pred = [-1] * n
+
+        for src in range(n):
+            dist[src] = 0
+            for _ in range(n - 1):
+                for u in range(n):
+                    for v in range(n):
+                        if arr[u][v] != 100000 and dist[u] + arr[u][v] < dist[v]:
+                            dist[v] = dist[u] + arr[u][v]
+                            pred[v] = u
+
             for u in range(n):
                 for v in range(n):
                     if arr[u][v] != 100000 and dist[u] + arr[u][v] < dist[v]:
-                        dist[v] = dist[u] + arr[u][v]
-                        pred[v] = u
+                        cycle = []
+                        x = v
+                        for _ in range(n):
+                            x = pred[x]
 
-    for u in range(n):
-        for v in range(n):
-            if arr[u][v] != 100000 and dist[u] + arr[u][v] < dist[v]:
-                x = v
-                for _ in range(n):
-                    x = pred[x]
+                        cycle_start = x
+                        while True:
+                            cycle.append(cycle_start + 1)
+                            cycle_start = pred[cycle_start]
+                            if cycle_start + 1 in cycle:
+                                cycle.append(cycle_start + 1)
+                                break
 
-                cycle_start = x
-                cycle = []
-                while True:
-                    cycle.append(cycle_start + 1)
-                    cycle_start = pred[cycle_start]
-                    if cycle_start + 1 in cycle:
-                        cycle.append(cycle_start + 1)
-                        break
+                        cycle.reverse()
+                        cycle = cycle[cycle.index(cycle_start + 1):-1]
 
-                cycle.reverse()
-                cycle = cycle[cycle.index(cycle_start + 1):-1]
+                        return len(cycle), cycle
 
-                return len(cycle), cycle
+        return 0, []
 
-    return 0, []
+    return find_negative_cycle()
 
 
 def main():
