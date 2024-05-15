@@ -1,40 +1,36 @@
-from collections import defaultdict
+def is_non_decreasing(a, b):
+    return int(''.join(a)) <= int(''.join(b))
 
 
 def solution(n, arr):
-    def generate_sub_numbers(num):
-        sub_numbers = set()
-        num_str = str(num)
-        length = len(num_str)
+    # Transform each number into a list of its digits
+    digit_arrays = [list(str(x)) for x in arr]
 
-        for mask in range(1, 1 << length):
-            sub_number = ''.join([num_str[i] for i in range(length) if mask & (1 << i)])
-            sub_numbers.add(int(sub_number))
-
-        return sub_numbers
-
-    sub_numbers_list = [generate_sub_numbers(a) for a in arr]
-    dp = [defaultdict(lambda: float('inf')) for _ in range(n)]
-
-    for sub_number in sub_numbers_list[0]:
-        dp[0][sub_number] = len(str(arr[0])) - len(str(sub_number))
+    # Dynamic programming table to store the minimum removals
+    dp = [float('inf')] * n
+    dp[0] = 0
 
     for i in range(1, n):
-        for sub_number in sub_numbers_list[i]:
-            sub_number_length = len(str(sub_number))
-            deletions = len(str(arr[i])) - sub_number_length
-            for prev_sub_number in dp[i - 1]:
-                if prev_sub_number <= sub_number:
-                    dp[i][sub_number] = min(dp[i][sub_number], dp[i - 1][prev_sub_number] + deletions)
+        for j in range(i):
+            # Try every possible way to remove digits from digit_arrays[j]
+            len_j = len(digit_arrays[j])
+            for remove_count_j in range(len_j + 1):
+                reduced_j = digit_arrays[j][remove_count_j:]
 
-    min_deletions = min(dp[-1].values(), default=float('inf'))
+                # Try every possible way to remove digits from digit_arrays[i]
+                len_i = len(digit_arrays[i])
+                for remove_count_i in range(len_i + 1):
+                    reduced_i = digit_arrays[i][remove_count_i:]
 
-    return min_deletions if min_deletions != float('inf') else -1
+                    if reduced_j and reduced_i and is_non_decreasing(reduced_j, reduced_i):
+                        dp[i] = min(dp[i], dp[j] + remove_count_j + remove_count_i)
+
+    return dp[-1] if dp[-1] != float('inf') else -1
 
 
 def main():
-    n = int(input())
-    arr = [int(input()) for _ in range(n)]
+    n = int(input().strip())
+    arr = [int(input().strip()) for _ in range(n)]
     result = solution(n, arr)
     print(result)
 
