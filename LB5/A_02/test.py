@@ -11,5 +11,5 @@ def test_solution():
         ], 2)
     ]
 
-    for narr, marr, expected in table:
-        assert solution(narr, marr) == expected
+    for costs, roads, expected in table:
+        assert solution(costs, roads) == expected

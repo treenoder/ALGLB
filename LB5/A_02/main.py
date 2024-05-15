@@ -1,15 +1,15 @@
-def solution(narr, marr):
+def solution(costs, roads):
     ...
 
 
 def main():
     input()
-    narr = list(map(int, input().split()))
+    costs = list(map(int, input().split()))
     m = int(input())
-    marr = []
+    roads = []
     for _ in range(m):
-        marr.append(list(map(int, input().split())))
-    result = solution(narr, marr)
+        roads.append(list(map(int, input().split())))
+    result = solution(costs, roads)
     print(result)
 
 
