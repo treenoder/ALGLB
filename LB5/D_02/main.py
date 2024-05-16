@@ -11,7 +11,9 @@ def solution(n, arr) -> float:
         return 0.0
 
     visited = [False] * n
-    min_heap = [(0, 0)]
+    min_dist = [float('inf')] * n
+    min_dist[0] = 0.0
+    min_heap = [(0.0, 0)]
     total_length = 0.0
 
     while min_heap:
@@ -24,7 +26,10 @@ def solution(n, arr) -> float:
 
         for v in range(n):
             if not visited[v]:
-                heapq.heappush(min_heap, (calculate_distance(arr[u], arr[v]), v))
+                distance = calculate_distance(arr[u], arr[v])
+                if distance < min_dist[v]:
+                    min_dist[v] = distance
+                    heapq.heappush(min_heap, (distance, v))
 
     return round(total_length, 5)
 
