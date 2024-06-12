@@ -17,7 +17,7 @@ def solution(arr, k):
     result = 0
 
     while left <= right:
-        mid = (left + right) // 2
+        mid = left + (right - left) // 2
         if is_possible(mid, arr, k):
             result = mid
             left = mid + 1
