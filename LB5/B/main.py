@@ -13,6 +13,7 @@ def solution(n, dist):
         for i in range(n):
             for j in range(n):
                 # Оновлюємо найкоротшу відстань між вершинами i та j через вершину k
+                # або dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
                 if dist[i][j] > dist[i][k] + dist[k][j]:
                     dist[i][j] = dist[i][k] + dist[k][j]
 
