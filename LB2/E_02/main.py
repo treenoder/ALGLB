@@ -1,13 +1,33 @@
 import sys
-from functools import cmp_to_key
 
 
-def compare(x, y):
+def compare(x: str, y: str):
+    """
+    Порівнює два рядки чисел, щоб визначити, в якому порядку їх об'єднання дасть більше число.
+    """
     return int(y + x) - int(x + y)
 
 
+def bubble_sort(arr, cmp):
+    """
+    Виконує сортування бульбашковим методом для заданого списку рядків чисел з використанням
+    заданої функції порівняння.
+    Складність: O(n^2)
+    """
+    n = len(arr)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if cmp(arr[j], arr[j + 1]) > 0:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr
+
+
 def solution(arr):
-    sorted_arr = sorted(arr, key=cmp_to_key(compare))
+    """
+    Знаходить максимальне можливе число, яке можна утворити з заданого списку чисел,
+    комбінуючи їх у рядок.
+    """
+    sorted_arr = bubble_sort(arr, compare)
     return ''.join(sorted_arr)
 
 

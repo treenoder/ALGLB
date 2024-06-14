@@ -14,4 +14,4 @@ def test_solution():
     ]
 
     for n, m, arr, expected in table:
-        assert solution(n, m, arr) == expected
+        assert solution(n, arr) == expected
