@@ -14,7 +14,6 @@ def solution(n, arr):
     # Ініціалізація матриці замикання, копіюючи початкову матрицю суміжності
     closure = [[arr[i][j] for j in range(n)] for i in range(n)]
 
-    # Основний цикл алгоритму для знаходження транзитивного замикання
     for k in range(n):
         for i in range(n):
             for j in range(n):
