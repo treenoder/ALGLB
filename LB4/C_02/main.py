@@ -1,7 +1,9 @@
 def solution(m):
     result = []
     for i in range(len(m)):
-        result.append([sum(m[j][i] for j in range(len(m))), sum(m[i])])
+        in_degree = sum(m[j][i] for j in range(len(m)))
+        out_degree = sum(m[i])
+        result.append([in_degree, out_degree])
     return result
 
 
