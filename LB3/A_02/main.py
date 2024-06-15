@@ -29,9 +29,6 @@ class Stack:
 
 
 def solution(stack, cmd, args):
-    """
-    Реалізувати стек (LIFO). Програма отримує на вхід послідовність команд, що задають дії над стеком.
-    """
     return getattr(stack, cmd)(*args)
 
 
